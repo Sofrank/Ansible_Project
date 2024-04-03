@@ -1,0 +1,19 @@
+- name: Deploy website on Ubuntu and CentOS nodes
+  hosts: all
+  become: true
+  vars:
+    website_content_path: "/home/earl/ansible_website_deploy/ass-3-main"
+
+  tasks:
+    - name: Copy website files to nodes
+      copy:
+        src: "{{ website_content_path }}"
+        dest: "/var/www/html"
+      when: ansible_distribution in ['Ubuntu', 'CentOS', 'Fedora']
+
+    - name: Set appropriate permissions for website files
+      file:
+        path: "/var/www/html"
+        state: directory
+        mode: "0755"
+      when: ansible_distribution in ['Ubuntu', 'CentOS', 'Fedora']
